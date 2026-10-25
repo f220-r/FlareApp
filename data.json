@@ -1,0 +1,262 @@
+{
+  "clinician": {
+    "name": "Dr. Elena Torres",
+    "title": "Specialist in Pulmonology",
+    "center": "CAP Primary Care & Hospital del Mar",
+    "id": "MED-CAT-84920"
+  },
+  "notifications": [
+    {
+      "id": "NOTIF-01",
+      "patientId": "PAT-4029",
+      "patientName": "Mateo Fontdevila",
+      "severity": "red",
+      "title": "Purulent Sputum Spike (Score 4.4)",
+      "message": "Significant baseline deviation (Δ +2.4). Attack hold 142s. High bacterial likelihood (87%).",
+      "time": "25 min ago",
+      "unread": true
+    },
+    {
+      "id": "NOTIF-02",
+      "patientId": "PAT-5821",
+      "patientName": "Joan Baptista Rovira",
+      "severity": "red",
+      "title": "Severe Attack Prolongation (185s)",
+      "message": "Dyspnea 5/5, Sputum color score 4.8 (Dark Olive). AI Exacerbation risk: 94/100.",
+      "time": "1 hour ago",
+      "unread": true
+    },
+    {
+      "id": "NOTIF-03",
+      "patientId": "PAT-4029",
+      "patientName": "Mateo Fontdevila",
+      "severity": "yellow",
+      "title": "Cough Duration Escalation",
+      "message": "Attack duration jumped from 45s to 96s. 4 inhaler puffs recorded.",
+      "time": "14 hours ago",
+      "unread": false
+    }
+  ],
+  "patients": [
+    {
+      "id": "PAT-4029",
+      "dni": "48291034K",
+      "name": "Mateo Fontdevila Garriga",
+      "age": 68,
+      "sex": "Male",
+      "assignedToMe": true,
+      "smokingStatus": "Former Smoker (38 pack-years, quit 2019)",
+      "fev1Predicted": 44,
+      "bmi": 24.2,
+      "goldStage": "GOLD 3 (Group E - High Risk)",
+      "hospitalizationsLastYear": 2,
+      "exacerbationRiskScore": 88,
+      "baselineSputumScore": 2.0,
+      "currentMedications": [
+        { "name": "Tiotropium / Olodaterol", "type": "LAMA / LABA", "dose": "2 puffs QD" },
+        { "name": "Fluticasone Furoate", "type": "ICS", "dose": "1 puff QD" },
+        { "name": "Salbutamol", "type": "Rescue SABA", "dose": "PRN (As needed)" }
+      ],
+      "antibioticsActive": false,
+      "vaccinations": {
+        "influenza": "Active (Oct 2025)",
+        "pneumococcal": "Pneumovax 23 (2023)"
+      },
+      "comorbidities": ["Bronchiectasis (RLL)", "Mild Pulmonary Hypertension", "GERD"],
+      "logs": [
+        {
+          "id": "LOG-881",
+          "timestamp": "2026-10-25 08:30",
+          "type": "button_attack",
+          "durationSec": 142,
+          "dyspnea": 4,
+          "inhalerPuffs": 4,
+          "sputumScore": 4.4,
+          "sputumDescription": "Purulent Dark Olive",
+          "cieLab": { "L": 46.2, "a": -12.4, "b": 28.1 },
+          "aqi": 92,
+          "tempC": 14.2,
+          "humidity": 86,
+          "significantChange": true,
+          "bacterialCultureProbability": 87,
+          "clinicalRecommendation": "Initiate Lung Attack Pack (Amoxicillin/Clavulanate 875/125mg + Prednisone 30mg taper). Collect sputum culture."
+        },
+        {
+          "id": "LOG-880",
+          "timestamp": "2026-10-24 19:15",
+          "type": "button_attack",
+          "durationSec": 96,
+          "dyspnea": 3,
+          "inhalerPuffs": 3,
+          "sputumScore": 3.8,
+          "sputumDescription": "Mucopurulent Light Green",
+          "cieLab": { "L": 56.8, "a": -8.1, "b": 24.0 },
+          "aqi": 78,
+          "tempC": 16.0,
+          "humidity": 78,
+          "significantChange": true,
+          "bacterialCultureProbability": 72,
+          "clinicalRecommendation": "Monitor oxygenation, escalate to clinician tele-triage if purulence persists >24h."
+        },
+        {
+          "id": "LOG-879",
+          "timestamp": "2026-10-24 08:00",
+          "type": "daily_check",
+          "durationSec": 0,
+          "dyspnea": 3,
+          "inhalerPuffs": 2,
+          "sputumScore": 3.2,
+          "sputumDescription": "Yellow-Green Transition",
+          "cieLab": { "L": 63.5, "a": -3.4, "b": 21.0 },
+          "aqi": 64,
+          "tempC": 15.1,
+          "humidity": 72,
+          "significantChange": true,
+          "bacterialCultureProbability": 61,
+          "clinicalRecommendation": "Reinforce chest physiotherapy, hydration, and dual bronchodilator adherence."
+        },
+        {
+          "id": "LOG-878",
+          "timestamp": "2026-10-23 08:15",
+          "type": "daily_check",
+          "durationSec": 0,
+          "dyspnea": 2,
+          "inhalerPuffs": 1,
+          "sputumScore": 2.1,
+          "sputumDescription": "Pale Yellow / Mucoid",
+          "cieLab": { "L": 74.1, "a": 1.2, "b": 14.5 },
+          "aqi": 45,
+          "tempC": 18.2,
+          "humidity": 62,
+          "significantChange": false,
+          "bacterialCultureProbability": 18,
+          "clinicalRecommendation": "Stable baseline. Maintain current home regimen."
+        },
+        {
+          "id": "LOG-877",
+          "timestamp": "2026-10-22 17:40",
+          "type": "button_attack",
+          "durationSec": 45,
+          "dyspnea": 2,
+          "inhalerPuffs": 1,
+          "sputumScore": 1.9,
+          "sputumDescription": "Normal Clear Mucoid",
+          "cieLab": { "L": 79.0, "a": 0.1, "b": 9.8 },
+          "aqi": 38,
+          "tempC": 19.4,
+          "humidity": 58,
+          "significantChange": false,
+          "bacterialCultureProbability": 12,
+          "clinicalRecommendation": "Routine maintenance."
+        }
+      ]
+    },
+    {
+      "id": "PAT-3118",
+      "dni": "39201948B",
+      "name": "Carme Soler i Valls",
+      "age": 72,
+      "sex": "Female",
+      "assignedToMe": true,
+      "smokingStatus": "Never Smoker (Biomass fuel exposure)",
+      "fev1Predicted": 58,
+      "bmi": 27.8,
+      "goldStage": "GOLD 2 (Group B)",
+      "hospitalizationsLastYear": 0,
+      "exacerbationRiskScore": 42,
+      "baselineSputumScore": 1.6,
+      "currentMedications": [
+        { "name": "Umeclidinium / Vilanterol", "type": "LAMA / LABA", "dose": "1 puff QD" }
+      ],
+      "antibioticsActive": false,
+      "vaccinations": {
+        "influenza": "Active (Sep 2025)",
+        "pneumococcal": "Completed (2024)"
+      },
+      "comorbidities": ["Asthma-COPD Overlap (ACO)", "Osteopenia"],
+      "logs": [
+        {
+          "id": "LOG-701",
+          "timestamp": "2026-10-25 07:45",
+          "type": "daily_check",
+          "durationSec": 0,
+          "dyspnea": 2,
+          "inhalerPuffs": 1,
+          "sputumScore": 2.2,
+          "sputumDescription": "Slight Mucopurulent",
+          "cieLab": { "L": 72.0, "a": -1.0, "b": 15.2 },
+          "aqi": 68,
+          "tempC": 16.5,
+          "humidity": 70,
+          "significantChange": false,
+          "bacterialCultureProbability": 24,
+          "clinicalRecommendation": "Observe morning cough changes; hydration recommended."
+        }
+      ]
+    },
+    {
+      "id": "PAT-5821",
+      "dni": "51928374M",
+      "name": "Joan Baptista Rovira",
+      "age": 63,
+      "sex": "Male",
+      "assignedToMe": true,
+      "smokingStatus": "Current Smoker (42 pack-years)",
+      "fev1Predicted": 38,
+      "bmi": 21.0,
+      "goldStage": "GOLD 4 (Group E - Very Severe)",
+      "hospitalizationsLastYear": 3,
+      "exacerbationRiskScore": 94,
+      "baselineSputumScore": 2.8,
+      "currentMedications": [
+        { "name": "Trelegy Ellipta (FF/UMEC/VI)", "type": "Triple Therapy", "dose": "1 puff QD" },
+        { "name": "Azithromycin", "type": "Macrolide Prophylaxis", "dose": "250mg M-W-F" }
+      ],
+      "antibioticsActive": true,
+      "vaccinations": {
+        "influenza": "Active (Oct 2025)",
+        "pneumococcal": "Prevnar 20"
+      },
+      "comorbidities": ["Cor Pulmonale", "Severe Cachexia"],
+      "logs": [
+        {
+          "id": "LOG-910",
+          "timestamp": "2026-10-25 09:00",
+          "type": "button_attack",
+          "durationSec": 185,
+          "dyspnea": 5,
+          "inhalerPuffs": 5,
+          "sputumScore": 4.8,
+          "sputumDescription": "Heavy Purulent Virulent Green",
+          "cieLab": { "L": 39.8, "a": -14.6, "b": 32.2 },
+          "aqi": 104,
+          "tempC": 13.8,
+          "humidity": 89,
+          "significantChange": true,
+          "bacterialCultureProbability": 92,
+          "clinicalRecommendation": "Emergency evaluation: Desaturation risk. Immediate sputum PCR & fluoroquinolones evaluation."
+        }
+      ]
+    },
+    {
+      "id": "PAT-9014",
+      "dni": "47182930R",
+      "name": "Montserrat Casals Bosch",
+      "age": 70,
+      "sex": "Female",
+      "assignedToMe": false,
+      "smokingStatus": "Former Smoker (22 pack-years)",
+      "fev1Predicted": 62,
+      "bmi": 25.4,
+      "goldStage": "GOLD 2 (Group A)",
+      "hospitalizationsLastYear": 0,
+      "exacerbationRiskScore": 31,
+      "baselineSputumScore": 1.5,
+      "currentMedications": [],
+      "antibioticsActive": false,
+      "vaccinations": {},
+      "comorbidities": ["Hypertension"],
+      "logs": []
+    }
+  ]
+}
