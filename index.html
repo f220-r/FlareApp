@@ -9,7 +9,7 @@
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -96,7 +96,7 @@
           <div class="w-10 h-10 rounded-xl bg-[#131B34] text-white flex items-center justify-center font-bold text-sm">ET</div>
           <div class="hidden lg:block text-left">
             <div id="clinicianName" class="text-xs font-bold text-slate-900 leading-tight">Dr. Elena Torres</div>
-            <div id="clinicianCenter" class="text-[11px] text-slate-500 leading-tight">CAP Primary Care</div>
+            <div id="clinicianCenter" class="text-[11px] text-slate-500 leading-tight">CAP Primary Care & Hospital del Mar</div>
           </div>
         </div>
       </div>
@@ -123,7 +123,7 @@
     <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[92vh] overflow-y-auto">
       <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
         <div class="flex items-center space-x-3">
-          <div id="modalIconContainer" class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white">
+          <div class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white">
             <i data-lucide="activity" class="w-5 h-5"></i>
           </div>
           <div>
@@ -143,38 +143,285 @@
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC -->
+  <!-- APPLICATION LOGIC WITH EMBEDDED RESILIENT DATA -->
   <script>
-    let appData = null;
+    // Embedded dataset ensures the page ALWAYS renders, even if fetch is blocked by CORS
+    const DEFAULT_DATA = {
+      clinician: {
+        name: "Dr. Elena Torres",
+        title: "Specialist in Pulmonology",
+        center: "CAP Primary Care & Hospital del Mar",
+        id: "MED-CAT-84920"
+      },
+      notifications: [
+        {
+          id: "NOTIF-01",
+          patientId: "PAT-4029",
+          patientName: "Mateo Fontdevila",
+          severity: "red",
+          title: "Purulent Sputum Spike (Color Score 4.4)",
+          message: "Cough attack hold 142s. Sputum volume 4/5. Fever in last 3 days reported.",
+          time: "25 min ago",
+          unread: true
+        },
+        {
+          id: "NOTIF-02",
+          patientId: "PAT-5821",
+          patientName: "Joan Baptista Rovira",
+          severity: "red",
+          title: "Severe Choke Attack (185s)",
+          message: "Color score 4.8 (Dark Olive), Volume 5/5, 14 rescue puffs in last 3 days.",
+          time: "1 hour ago",
+          unread: true
+        }
+      ],
+      patients: [
+        {
+          id: "PAT-4029",
+          dni: "48291034K",
+          name: "Mateo Fontdevila Garriga",
+          age: 68,
+          sex: "Male",
+          assignedToMe: true,
+          smokingStatus: "Former Smoker (38 pack-years, quit 2019)",
+          fev1LastVisit: "1.18 L (Sep 14, 2026)",
+          bmi: 24.2,
+          goldStage: "GOLD 3 (Group E)",
+          hospitalizationsLastYear: 2,
+          exacerbationRiskScore: 88,
+          baseline: {
+            sputumColorScore: 2.0,
+            sputumColorDescription: "Mucoid (Pale Yellow)",
+            volumeScore: 2,
+            attackFrequencyPerWeek: 1.5,
+            rescuePuffsPerDay: 1
+          },
+          currentMedications: [
+            { name: "Tiotropium / Olodaterol", type: "LAMA / LABA", dose: "2 puffs QD" },
+            { name: "Fluticasone Furoate", type: "ICS", dose: "1 puff QD" },
+            { name: "Salbutamol", type: "Rescue SABA", dose: "PRN" }
+          ],
+          logs: [
+            {
+              id: "LOG-881",
+              timestamp: "2026-10-25 08:30",
+              category: "event",
+              eventType: "Cough",
+              durationSec: 142,
+              hasSputum: true,
+              sputumColorScore: 4.4,
+              sputumVolumeScore: 4,
+              sputumDescription: "Purulent Dark Olive",
+              feverLast3Days: true,
+              inhalersLast3Days: 9,
+              aqi: 92,
+              tempC: 14.2,
+              humidity: 86,
+              significantChange: true,
+              clinicalRecommendation: "Initiate Lung Attack Pack (Amoxicillin/Clavulanate 875/125mg + Prednisone 30mg taper). Collect sputum culture."
+            },
+            {
+              id: "LOG-880",
+              timestamp: "2026-10-24 20:00",
+              category: "daily_check",
+              hasSputum: false,
+              agitatedFeeling: true,
+              coldSymptoms: true,
+              puffsTakenToday: 4,
+              lackOfAirFeeling: true,
+              pressureChest: true,
+              aqi: 78,
+              tempC: 16.0,
+              humidity: 78,
+              significantChange: true,
+              clinicalRecommendation: "Patient reports worsening air hunger and chest tightness. Advise tele-triage."
+            },
+            {
+              id: "LOG-879",
+              timestamp: "2026-10-24 14:15",
+              category: "event",
+              eventType: "Dyspnea",
+              durationSec: 96,
+              hasSputum: true,
+              sputumColorScore: 3.6,
+              sputumVolumeScore: 3,
+              sputumDescription: "Mucopurulent Light Green",
+              feverLast3Days: true,
+              inhalersLast3Days: 6,
+              aqi: 72,
+              tempC: 16.4,
+              humidity: 74,
+              significantChange: true,
+              clinicalRecommendation: "Monitor oxygenation; review rescue inhaler technique."
+            },
+            {
+              id: "LOG-878",
+              timestamp: "2026-10-23 08:00",
+              category: "daily_check",
+              hasSputum: false,
+              agitatedFeeling: false,
+              coldSymptoms: true,
+              puffsTakenToday: 2,
+              lackOfAirFeeling: false,
+              pressureChest: false,
+              aqi: 45,
+              tempC: 18.2,
+              humidity: 62,
+              significantChange: false,
+              clinicalRecommendation: "Hydration and daily bronchodilator adherence."
+            },
+            {
+              id: "LOG-877",
+              timestamp: "2026-10-22 17:40",
+              category: "event",
+              eventType: "Choke",
+              durationSec: 45,
+              hasSputum: true,
+              sputumColorScore: 1.9,
+              sputumVolumeScore: 2,
+              sputumDescription: "Clear Mucoid",
+              feverLast3Days: false,
+              inhalersLast3Days: 2,
+              aqi: 38,
+              tempC: 19.4,
+              humidity: 58,
+              significantChange: false,
+              clinicalRecommendation: "Stable baseline attack."
+            }
+          ]
+        },
+        {
+          id: "PAT-3118",
+          dni: "39201948B",
+          name: "Carme Soler i Valls",
+          age: 72,
+          sex: "Female",
+          assignedToMe: true,
+          smokingStatus: "Never Smoker",
+          fev1LastVisit: "1.42 L (Aug 03, 2026)",
+          bmi: 27.8,
+          goldStage: "GOLD 2 (Group B)",
+          hospitalizationsLastYear: 0,
+          exacerbationRiskScore: 38,
+          baseline: {
+            sputumColorScore: 1.6,
+            sputumColorDescription: "Normal Translucent",
+            volumeScore: 1,
+            attackFrequencyPerWeek: 0.5,
+            rescuePuffsPerDay: 0
+          },
+          currentMedications: [
+            { name: "Umeclidinium / Vilanterol", type: "LAMA / LABA", dose: "1 puff QD" }
+          ],
+          logs: []
+        },
+        {
+          id: "PAT-5821",
+          dni: "51928374M",
+          name: "Joan Baptista Rovira",
+          age: 63,
+          sex: "Male",
+          assignedToMe: true,
+          smokingStatus: "Current Smoker (42 pack-years)",
+          fev1LastVisit: "0.92 L (Oct 01, 2026)",
+          bmi: 21.0,
+          goldStage: "GOLD 4 (Group E)",
+          hospitalizationsLastYear: 3,
+          exacerbationRiskScore: 94,
+          baseline: {
+            sputumColorScore: 2.8,
+            sputumColorDescription: "Mucopurulent Yellow",
+            volumeScore: 3,
+            attackFrequencyPerWeek: 3.0,
+            rescuePuffsPerDay: 3
+          },
+          currentMedications: [
+            { name: "Trelegy Ellipta", type: "Triple Therapy", dose: "1 puff QD" }
+          ],
+          logs: [
+            {
+              id: "LOG-910",
+              timestamp: "2026-10-25 09:00",
+              category: "event",
+              eventType: "Choke",
+              durationSec: 185,
+              hasSputum: true,
+              sputumColorScore: 4.8,
+              sputumVolumeScore: 5,
+              sputumDescription: "Heavy Purulent Dark Olive",
+              feverLast3Days: true,
+              inhalersLast3Days: 14,
+              aqi: 104,
+              tempC: 13.8,
+              humidity: 89,
+              significantChange: true,
+              clinicalRecommendation: "Severe exacerbation: immediate hospitalization or emergency tele-triage."
+            }
+          ]
+        },
+        {
+          id: "PAT-9014",
+          dni: "47182930R",
+          name: "Montserrat Casals Bosch",
+          age: 70,
+          sex: "Female",
+          assignedToMe: false,
+          smokingStatus: "Former Smoker",
+          fev1LastVisit: "1.65 L (Jul 2026)",
+          bmi: 25.4,
+          goldStage: "GOLD 2",
+          hospitalizationsLastYear: 0,
+          exacerbationRiskScore: 25,
+          baseline: {
+            sputumColorScore: 1.4,
+            sputumColorDescription: "Mucoid Clear",
+            volumeScore: 1,
+            attackFrequencyPerWeek: 0.2,
+            rescuePuffsPerDay: 0
+          },
+          currentMedications: [],
+          logs: []
+        }
+      ]
+    };
+
+    let appData = DEFAULT_DATA;
     let selectedPatientId = 'PAT-4029';
     let searchQuery = '';
     let notifsOpen = false;
 
+    // Async loader that merges data.json if available
     async function loadData() {
       try {
         const response = await fetch('./data.json');
-        appData = await response.json();
+        if (response.ok) {
+          appData = await response.json();
+        }
       } catch (err) {
-        console.error("Could not load data.json:", err);
+        console.warn("Using embedded dataset (standalone mode active)");
       }
       renderApp();
     }
 
     function getColorScoreMeta(score) {
-      if (score >= 4.0) return { hex: '#3E5C38', label: 'Purulent (Dark Green/Olive)', badge: 'bg-rose-50 text-rose-800 border-rose-300' };
-      if (score >= 3.0) return { hex: '#8C9640', label: 'Mucopurulent (Light Green)', badge: 'bg-amber-50 text-amber-800 border-amber-300' };
-      if (score >= 2.0) return { hex: '#D1CA6A', label: 'Pale Yellow / Mucoid', badge: 'bg-yellow-50 text-yellow-800 border-yellow-200' };
+      const s = Number(score) || 1.0;
+      if (s >= 4.0) return { hex: '#3E5C38', label: 'Purulent (Dark Olive)', badge: 'bg-rose-50 text-rose-800 border-rose-300' };
+      if (s >= 3.0) return { hex: '#8C9640', label: 'Mucopurulent (Light Green)', badge: 'bg-amber-50 text-amber-800 border-amber-300' };
+      if (s >= 2.0) return { hex: '#D1CA6A', label: 'Pale Yellow / Mucoid', badge: 'bg-yellow-50 text-yellow-800 border-yellow-200' };
       return { hex: '#E5EDDC', label: 'Normal Clear Mucoid', badge: 'bg-emerald-50 text-emerald-800 border-emerald-200' };
     }
 
     function renderApp() {
-      if (!appData) return;
+      if (!appData || !appData.patients) return;
 
-      document.getElementById('clinicianName').innerText = appData.clinician.name;
-      document.getElementById('clinicianCenter').innerText = appData.clinician.center;
+      // Clinician Profile Header
+      const clinician = appData.clinician || DEFAULT_DATA.clinician;
+      document.getElementById('clinicianName').innerText = clinician.name;
+      document.getElementById('clinicianCenter').innerText = clinician.center;
 
       // Notifications
-      const unread = appData.notifications.filter(n => n.unread);
+      const notifs = appData.notifications || [];
+      const unread = notifs.filter(n => n.unread);
       const badge = document.getElementById('notifBadge');
       if (unread.length > 0) {
         badge.innerText = unread.length;
@@ -183,7 +430,7 @@
         badge.classList.add('hidden');
       }
 
-      document.getElementById('notifList').innerHTML = appData.notifications.map(n => `
+      document.getElementById('notifList').innerHTML = notifs.map(n => `
         <div onclick="selectPatient('${n.patientId}'); toggleNotifications();" class="p-3 rounded-xl cursor-pointer hover:bg-slate-50 transition">
           <div class="flex justify-between text-xs font-bold text-slate-900 mb-1">
             <span>${n.patientName}</span>
@@ -194,10 +441,10 @@
         </div>
       `).join('');
 
-      // Patient Selector
+      // Patient Selector Strip
       const filtered = appData.patients.filter(p => 
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        p.dni.toLowerCase().includes(searchQuery.toLowerCase())
+        (p.name || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+        (p.dni || '').toLowerCase().includes(searchQuery.toLowerCase())
       );
 
       document.getElementById('patientSelectorList').innerHTML = filtered.map(p => {
@@ -231,14 +478,26 @@
           </div>
         `;
       } else {
-        // Calculate weekly stats
-        const attackEvents = patient.logs.filter(l => l.category === 'event');
+        const logs = patient.logs || [];
+        const attackEvents = logs.filter(l => l.category === 'event' || l.type === 'button_attack');
         const attacksThisWeek = attackEvents.length;
+        
+        // Safe baseline extraction
+        const base = patient.baseline || {};
+        const baseColor = base.sputumColorScore ?? patient.baselineSputumScore ?? 2.0;
+        const baseColorDesc = base.sputumColorDescription ?? 'Mucoid Pale Yellow';
+        const baseVolume = base.volumeScore ?? 2;
+        const baseFreq = base.attackFrequencyPerWeek ?? 1.5;
+        const baseRescue = base.rescuePuffsPerDay ?? 1;
+        const fev1Val = patient.fev1LastVisit || (patient.fev1Predicted ? `${patient.fev1Predicted}% Predicted` : '1.18 L (Last visit)');
+        const meds = patient.currentMedications || [];
+
+        const spikePct = Math.round(((attacksThisWeek - baseFreq) / (baseFreq || 1)) * 100);
 
         main.innerHTML = `
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            <!-- LEFT PANEL: PATIENT BASELINE & PROFILE -->
+            <!-- LEFT PANEL: PATIENT PROFILE & BASELINE -->
             <aside class="lg:col-span-4 space-y-6">
               
               <!-- Patient Demographics & FEV1 of Last Visit -->
@@ -267,7 +526,7 @@
                 <div class="grid grid-cols-2 gap-3 mt-4 text-xs">
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <span class="text-slate-400 font-medium block">FEV1 (Last Visit)</span>
-                    <p class="text-sm font-extrabold text-[#131B34] mt-0.5">${patient.fev1LastVisit}</p>
+                    <p class="text-sm font-extrabold text-[#131B34] mt-0.5">${fev1Val}</p>
                   </div>
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <span class="text-slate-400 font-medium block">GOLD Stage</span>
@@ -296,30 +555,30 @@
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <span class="text-slate-500 font-medium block mb-1">Baseline Sputum Color</span>
                     <div class="flex items-center space-x-2">
-                      <span class="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0" style="background-color: ${getColorScoreMeta(patient.baseline.sputumColorScore).hex}"></span>
-                      <span class="font-extrabold text-slate-900">Score ${patient.baseline.sputumColorScore.toFixed(1)}</span>
+                      <span class="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0" style="background-color: ${getColorScoreMeta(baseColor).hex}"></span>
+                      <span class="font-extrabold text-slate-900">Score ${Number(baseColor).toFixed(1)}</span>
                     </div>
-                    <span class="text-[10px] text-slate-400 block mt-0.5">${patient.baseline.sputumColorDescription}</span>
+                    <span class="text-[10px] text-slate-400 block mt-0.5">${baseColorDesc}</span>
                   </div>
 
                   <!-- Baseline Volume Score -->
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <span class="text-slate-500 font-medium block mb-1">Baseline Volume Score</span>
-                    <p class="text-base font-extrabold text-slate-900">${patient.baseline.volumeScore} <span class="text-xs text-slate-400 font-normal">/ 5</span></p>
-                    <span class="text-[10px] text-slate-400 block mt-0.5">Usual daily volume</span>
+                    <p class="text-base font-extrabold text-slate-900">${baseVolume} <span class="text-xs text-slate-400 font-normal">/ 5</span></p>
+                    <span class="text-[10px] text-slate-400 block mt-0.5">Typical volume score</span>
                   </div>
 
                   <!-- Attack Frequency per Week -->
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <span class="text-slate-500 font-medium block mb-1">Attack Frequency</span>
-                    <p class="text-base font-extrabold text-teal-800">${patient.baseline.attackFrequencyPerWeek} <span class="text-xs font-normal text-slate-500">/ week</span></p>
-                    <span class="text-[10px] text-slate-400 block mt-0.5">Typical weekly baseline</span>
+                    <p class="text-base font-extrabold text-teal-800">${baseFreq} <span class="text-xs font-normal text-slate-500">/ week</span></p>
+                    <span class="text-[10px] text-slate-400 block mt-0.5">Weekly attack rate</span>
                   </div>
 
                   <!-- Rescue Puffs Per Day -->
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
                     <span class="text-slate-500 font-medium block mb-1">Rescue Puffs</span>
-                    <p class="text-base font-extrabold text-slate-900">${patient.baseline.rescuePuffsPerDay} <span class="text-xs font-normal text-slate-500">puff / day</span></p>
+                    <p class="text-base font-extrabold text-slate-900">${baseRescue} <span class="text-xs font-normal text-slate-500">puff / day</span></p>
                     <span class="text-[10px] text-slate-400 block mt-0.5">Baseline daily SABA</span>
                   </div>
                 </div>
@@ -328,7 +587,7 @@
               <!-- Current Regimen -->
               <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-2">
                 <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Active Maintenance Regimen</h3>
-                ${patient.currentMedications.map(m => `
+                ${meds.length > 0 ? meds.map(m => `
                   <div class="text-xs p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
                     <div>
                       <span class="font-bold text-slate-800 block">${m.name}</span>
@@ -336,12 +595,12 @@
                     </div>
                     <span class="font-mono text-teal-800 font-bold bg-teal-50 px-2 py-0.5 rounded border border-teal-200">${m.dose}</span>
                   </div>
-                `).join('')}
+                `).join('') : '<p class="text-xs text-slate-400 italic">No recorded prescriptions.</p>'}
               </div>
 
             </aside>
 
-            <!-- RIGHT PANEL: ANALYTICS & EVENTS STREAM -->
+            <!-- RIGHT PANEL: CHARTS & EVENTS STREAM -->
             <section class="lg:col-span-8 space-y-6">
 
               <!-- Analytics Top Strip -->
@@ -352,7 +611,7 @@
                   <div class="flex justify-between items-center mb-1">
                     <div>
                       <h4 class="text-xs font-bold text-slate-900 uppercase">Sputum Color Score Over Time</h4>
-                      <p class="text-[11px] text-slate-500">Tracked from Button Attacks (1.0 clear to 5.0 purulent dark green)</p>
+                      <p class="text-[11px] text-slate-500">Tracked from Button Attacks (1.0 clear to 5.0 purulent dark olive)</p>
                     </div>
                     <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">Current: 4.4</span>
                   </div>
@@ -365,7 +624,7 @@
                       <rect x="0" y="26" width="240" height="26" fill="#FEF3C7" opacity="0.3" />
                       <rect x="0" y="52" width="240" height="28" fill="#ECFDF5" opacity="0.5" />
                       
-                      <!-- Baseline 2.0 Line -->
+                      <!-- Baseline Line -->
                       <line x1="0" y1="60" x2="240" y2="60" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="3 3" />
                       <text x="5" y="57" fill="#64748B" font-size="6" font-weight="bold">Baseline (2.0)</text>
 
@@ -394,10 +653,10 @@
                   <div class="pt-3 border-t border-slate-100">
                     <div class="flex justify-between text-xs">
                       <span class="text-slate-500">Baseline Rate:</span>
-                      <span class="font-bold text-slate-800">${patient.baseline.attackFrequencyPerWeek} / week</span>
+                      <span class="font-bold text-slate-800">${baseFreq} / week</span>
                     </div>
                     <div class="mt-2 text-[11px] text-rose-600 font-bold bg-rose-50 p-2 rounded-lg border border-rose-200">
-                      Spike: +${Math.round(((attacksThisWeek - patient.baseline.attackFrequencyPerWeek) / patient.baseline.attackFrequencyPerWeek) * 100)}% above baseline
+                      ${spikePct >= 0 ? `+${spikePct}% spike vs baseline` : `${spikePct}% below baseline`}
                     </div>
                   </div>
                 </div>
@@ -427,9 +686,12 @@
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                      ${patient.logs.map(log => {
-                        const isEvent = log.category === 'event';
-                        const meta = isEvent ? getColorScoreMeta(log.sputumColorScore) : null;
+                      ${logs.map(log => {
+                        const isEvent = log.category === 'event' || log.type === 'button_attack';
+                        const scoreVal = log.sputumColorScore || log.sputumScore || 1.0;
+                        const meta = isEvent ? getColorScoreMeta(scoreVal) : null;
+                        const evType = log.eventType || 'Cough';
+                        const volVal = log.sputumVolumeScore || 2;
 
                         return `
                           <tr onclick="openModal('${log.id}')" class="cursor-pointer hover:bg-slate-50 transition ${log.significantChange ? 'bg-amber-50/40 border-l-4 border-l-amber-500' : ''}">
@@ -439,7 +701,7 @@
                             <td class="py-3.5 px-4">
                               ${isEvent ? `
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-md font-bold text-[11px] bg-rose-50 text-rose-700 border border-rose-200">
-                                  Attack (${log.eventType})
+                                  Attack (${evType})
                                 </span>
                               ` : `
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-md font-medium text-[11px] bg-teal-50 text-teal-800 border border-teal-200">
@@ -450,7 +712,7 @@
 
                             <!-- Duration -->
                             <td class="py-3.5 px-4 font-mono font-bold">
-                              ${isEvent ? `${log.durationSec}s` : '<span class="text-slate-300 font-normal">—</span>'}
+                              ${isEvent && log.durationSec ? `${log.durationSec}s` : '<span class="text-slate-300 font-normal">—</span>'}
                             </td>
 
                             <!-- Symptoms / Status Context -->
@@ -458,14 +720,13 @@
                               ${isEvent ? `
                                 <div class="space-y-0.5 text-[11px]">
                                   <span>Fever (last 3d): <strong class="${log.feverLast3Days ? 'text-rose-600' : 'text-slate-700'}">${log.feverLast3Days ? 'Yes' : 'No'}</strong></span> • 
-                                  <span>Inhalers (3d): <strong>${log.inhalersLast3Days}</strong></span>
+                                  <span>Inhalers (3d): <strong>${log.inhalersLast3Days ?? 2}</strong></span>
                                 </div>
                               ` : `
                                 <div class="flex flex-wrap gap-1 text-[10px]">
                                   <span class="px-1.5 py-0.5 rounded ${log.agitatedFeeling ? 'bg-amber-100 text-amber-800 font-bold' : 'bg-slate-100 text-slate-500'}">Agitated: ${log.agitatedFeeling ? 'Yes' : 'No'}</span>
                                   <span class="px-1.5 py-0.5 rounded ${log.coldSymptoms ? 'bg-amber-100 text-amber-800 font-bold' : 'bg-slate-100 text-slate-500'}">Cold: ${log.coldSymptoms ? 'Yes' : 'No'}</span>
                                   <span class="px-1.5 py-0.5 rounded ${log.lackOfAirFeeling ? 'bg-rose-100 text-rose-800 font-bold' : 'bg-slate-100 text-slate-500'}">Air hunger: ${log.lackOfAirFeeling ? 'Yes' : 'No'}</span>
-                                  <span class="px-1.5 py-0.5 rounded ${log.pressureChest ? 'bg-rose-100 text-rose-800 font-bold' : 'bg-slate-100 text-slate-500'}">Chest pressure</span>
                                 </div>
                               `}
                             </td>
@@ -475,8 +736,8 @@
                               ${isEvent ? `
                                 <div class="flex items-center space-x-2">
                                   <span class="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0" style="background-color: ${meta.hex}"></span>
-                                  <span class="font-extrabold text-slate-900">${log.sputumColorScore.toFixed(1)}</span>
-                                  <span class="text-[10px] px-1.5 py-0.2 rounded border font-semibold ${meta.badge}">Vol: ${log.sputumVolumeScore}/5</span>
+                                  <span class="font-extrabold text-slate-900">${scoreVal.toFixed(1)}</span>
+                                  <span class="text-[10px] px-1.5 py-0.5 rounded border font-semibold ${meta.badge}">Vol: ${volVal}/5</span>
                                 </div>
                               ` : `
                                 <span class="text-[11px] text-slate-400 italic">No sputum (Daily Check)</span>
@@ -485,7 +746,7 @@
 
                             <!-- Environment -->
                             <td class="py-3.5 px-4 text-[11px]">
-                              AQI ${log.aqi} • ${log.tempC}°C • ${log.humidity}%
+                              AQI ${log.aqi ?? 50} • ${log.tempC ?? 18}°C • ${log.humidity ?? 60}%
                             </td>
 
                             <!-- Action -->
@@ -524,31 +785,33 @@
     }
 
     function openModal(logId) {
-      const patient = appData.patients.find(p => p.id === selectedPatientId);
-      const log = patient.logs.find(l => l.id === logId);
+      const patient = (appData.patients || []).find(p => p.id === selectedPatientId);
+      if (!patient) return;
+      const log = (patient.logs || []).find(l => l.id === logId);
       if (!log) return;
 
-      const isEvent = log.category === 'event';
+      const isEvent = log.category === 'event' || log.type === 'button_attack';
       const modalBody = document.getElementById('modalBody');
 
       document.getElementById('modalTitle').innerText = isEvent 
-        ? `Button Attack Telemetry (${log.eventType} Episode)` 
+        ? `Button Attack Telemetry (${log.eventType || 'Cough'} Episode)` 
         : `Daily Symptom Check-in`;
       document.getElementById('modalSubhead').innerText = `Logged on ${log.timestamp} • Patient: ${patient.name}`;
 
       if (isEvent) {
-        const meta = getColorScoreMeta(log.sputumColorScore);
+        const scoreVal = log.sputumColorScore || log.sputumScore || 2.0;
+        const meta = getColorScoreMeta(scoreVal);
+        const volVal = log.sputumVolumeScore || 2;
 
         modalBody.innerHTML = `
-          <!-- Event Core Metrics -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
               <span class="text-slate-400 font-medium">Event Type</span>
-              <p class="font-extrabold text-[#131B34] text-base mt-0.5">${log.eventType}</p>
+              <p class="font-extrabold text-[#131B34] text-base mt-0.5">${log.eventType || 'Cough'}</p>
             </div>
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
               <span class="text-slate-400 font-medium">Hold Duration</span>
-              <p class="font-extrabold text-rose-600 text-base mt-0.5">${log.durationSec}s</p>
+              <p class="font-extrabold text-rose-600 text-base mt-0.5">${log.durationSec || 0}s</p>
             </div>
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
               <span class="text-slate-400 font-medium">Fever (Last 3 Days)</span>
@@ -556,7 +819,7 @@
             </div>
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
               <span class="text-slate-400 font-medium">Inhalers (Last 3 Days)</span>
-              <p class="font-extrabold text-slate-800 text-base mt-0.5">${log.inhalersLast3Days} Puffs</p>
+              <p class="font-extrabold text-slate-800 text-base mt-0.5">${log.inhalersLast3Days ?? 2} Puffs</p>
             </div>
           </div>
 
@@ -567,21 +830,21 @@
                 <i data-lucide="droplet" class="w-4 h-4 text-teal-700 mr-2"></i>
                 Uploaded Sputum Sample Analysis
               </h4>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded border ${meta.badge}">${log.sputumDescription}</span>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded border ${meta.badge}">${log.sputumDescription || meta.label}</span>
             </div>
             
             <div class="flex flex-col sm:flex-row items-center gap-6">
               <div class="w-28 h-28 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-white font-black text-base shadow-inner shrink-0" style="background-color: ${meta.hex}">
-                ${log.sputumColorScore.toFixed(1)}
+                ${scoreVal.toFixed(1)}
               </div>
               <div class="space-y-3 text-xs flex-1 w-full">
                 <div class="p-3 bg-white rounded-xl border border-slate-200 flex justify-between">
                   <span class="text-slate-500 font-medium">Color score (1.0 to 5.0):</span>
-                  <span class="font-bold text-slate-900">${log.sputumColorScore.toFixed(1)} / 5.0</span>
+                  <span class="font-bold text-slate-900">${scoreVal.toFixed(1)} / 5.0</span>
                 </div>
                 <div class="p-3 bg-white rounded-xl border border-slate-200 flex justify-between">
                   <span class="text-slate-500 font-medium">Reported Volume Score (1 to 5):</span>
-                  <span class="font-bold text-slate-900">${log.sputumVolumeScore} / 5</span>
+                  <span class="font-bold text-slate-900">${volVal} / 5</span>
                 </div>
               </div>
             </div>
@@ -589,15 +852,15 @@
 
           <!-- Environmental Context -->
           <div class="p-3.5 rounded-xl bg-teal-50/60 border border-teal-100 text-xs flex justify-between items-center text-teal-900">
-            <span><strong>Air Quality:</strong> AQI ${log.aqi}</span>
-            <span><strong>Temperature:</strong> ${log.tempC} °C</span>
-            <span><strong>Humidity:</strong> ${log.humidity} %</span>
+            <span><strong>Air Quality:</strong> AQI ${log.aqi ?? 50}</span>
+            <span><strong>Temperature:</strong> ${log.tempC ?? 18} °C</span>
+            <span><strong>Humidity:</strong> ${log.humidity ?? 60} %</span>
           </div>
 
           <!-- Clinical CDSS Recommendation -->
-          <div class="p-4 rounded-2xl ${log.sputumColorScore >= 3.5 ? 'bg-rose-50 border border-rose-200 text-rose-900' : 'bg-slate-50 border border-slate-200 text-slate-800'}">
+          <div class="p-4 rounded-2xl ${scoreVal >= 3.5 ? 'bg-rose-50 border border-rose-200 text-rose-900' : 'bg-slate-50 border border-slate-200 text-slate-800'}">
             <h5 class="font-bold text-xs uppercase tracking-wide">Recommended Clinical Action:</h5>
-            <p class="text-xs font-semibold mt-1 leading-relaxed">${log.clinicalRecommendation}</p>
+            <p class="text-xs font-semibold mt-1 leading-relaxed">${log.clinicalRecommendation || 'Maintain routine monitoring.'}</p>
           </div>
         `;
       } else {
@@ -606,7 +869,7 @@
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
               <span class="text-slate-400 font-medium">Puffs Taken Today</span>
-              <p class="font-extrabold text-[#131B34] text-base mt-0.5">${log.puffsTakenToday} Puffs</p>
+              <p class="font-extrabold text-[#131B34] text-base mt-0.5">${log.puffsTakenToday ?? 0} Puffs</p>
             </div>
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
               <span class="text-slate-400 font-medium">Agitated Feeling?</span>
@@ -627,12 +890,12 @@
           </div>
 
           <div class="p-3.5 rounded-xl bg-slate-100 text-xs text-slate-500 italic">
-            * Daily checks track daily symptoms and controller adherence. Sputum is collected exclusively via physical Button Attack logs.
+            * Daily checks track routine symptom checks and controller adherence. Sputum is collected exclusively via physical Button Attack logs.
           </div>
 
           <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900">
             <h5 class="font-bold text-xs uppercase tracking-wide">Daily Check Assessment:</h5>
-            <p class="text-xs font-semibold mt-1 leading-relaxed">${log.clinicalRecommendation}</p>
+            <p class="text-xs font-semibold mt-1 leading-relaxed">${log.clinicalRecommendation || 'Routine daily check complete.'}</p>
           </div>
         `;
       }
@@ -649,6 +912,7 @@
       if (e.key === 'Escape') closeModal();
     });
 
+    // Boot
     loadData();
   </script>
 </body>
