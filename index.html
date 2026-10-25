@@ -9,34 +9,50 @@
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    /* Smooth transitions and scrollbar */
     body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-800">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col selection:bg-teal-100 selection:text-teal-900">
 
   <!-- TOP NAVIGATION -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 h-18 py-2 flex items-center justify-between">
       
-      <!-- Brand -->
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-teal-500 flex items-center justify-center shadow-md shadow-indigo-200 text-white">
-          <i data-lucide="activity" class="w-6 h-6 animate-pulse"></i>
-        </div>
+      <!-- Exact FlareApp Logo Recreated -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="selectPatient('PAT-4029')">
+        <svg class="w-12 h-12 shrink-0 drop-shadow-sm" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Trachea (Sky Blue) -->
+          <path d="M100 25 V75 M93 72 L78 95 M107 72 L122 95" stroke="#38BDF8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Left Lung (Dark Navy #131b34) -->
+          <path d="M92 48 C72 48 55 68 52 92 C48 120 54 150 72 158 C85 163 94 152 94 135 C94 105 94 65 92 48 Z" fill="#131B34" />
+          <!-- Right Lung (Teal #147B73) -->
+          <path d="M108 48 C128 48 145 68 148 92 C152 120 146 150 128 158 C115 163 106 152 106 135 C106 105 106 65 108 48 Z" fill="#147B73" />
+          <!-- Connecting Nodes & Chart Path -->
+          <path d="M58 148 L76 130 L100 130 L130 96 L142 128" stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M90 130 L110 130" stroke="#38BDF8" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- Node Dots -->
+          <circle cx="76" cy="130" r="5" fill="white" />
+          <circle cx="58" cy="148" r="4.5" fill="white" />
+          <circle cx="106" cy="130" r="4" fill="white" />
+          <circle cx="142" cy="128" r="4" fill="white" />
+          <!-- Target Node (Right Lung) -->
+          <circle cx="130" cy="96" r="10" stroke="white" stroke-width="4" fill="#147B73"/>
+          <circle cx="130" cy="96" r="4" fill="white"/>
+        </svg>
+
         <div>
           <div class="flex items-center space-x-2">
-            <span class="font-extrabold text-xl tracking-tight text-slate-900">
-              Flare<span class="text-indigo-600">App</span>
+            <span class="font-extrabold text-2xl tracking-tight text-[#131B34]">
+              Flare<span class="text-[#147B73]">App</span>
             </span>
-            <span class="bg-indigo-50 text-indigo-700 text-[11px] font-bold px-2 py-0.5 rounded-full border border-indigo-200">
-              CLINICIAN CDSS
+            <span class="bg-teal-50 text-teal-800 text-[11px] font-bold px-2 py-0.5 rounded-full border border-teal-200">
+              CLINICIAN PORTAL
             </span>
           </div>
-          <p class="text-xs text-slate-500 font-medium tracking-wide">Monitorea. Registra. Anticipa.</p>
+          <p class="text-xs text-slate-500 font-semibold tracking-wide">Monitorea. Registra. Anticipa.</p>
         </div>
       </div>
 
@@ -47,7 +63,7 @@
           id="searchInput"
           type="text"
           placeholder="Search patient by Name or DNI..."
-          class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+          class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition"
           oninput="handleSearch(this.value)"
         />
       </div>
@@ -67,11 +83,9 @@
 
           <!-- Notification Dropdown -->
           <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 p-3 z-50">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 px-2">
-              <div class="flex items-center space-x-2">
-                <i data-lucide="shield-alert" class="w-4 h-4 text-rose-600"></i>
-                <h4 class="font-bold text-sm text-slate-900">High-Risk Exacerbation Alerts</h4>
-              </div>
+            <div class="flex items-center space-x-2 pb-3 border-b border-slate-100 px-2">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-rose-600"></i>
+              <h4 class="font-bold text-sm text-slate-900">Unreviewed Exacerbation Alerts</h4>
             </div>
             <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-slate-100 py-1"></div>
           </div>
@@ -79,7 +93,7 @@
 
         <!-- Clinician Profile -->
         <div class="flex items-center space-x-3 pl-3 border-l border-slate-200">
-          <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm">ET</div>
+          <div class="w-10 h-10 rounded-xl bg-[#131B34] text-white flex items-center justify-center font-bold text-sm">ET</div>
           <div class="hidden lg:block text-left">
             <div id="clinicianName" class="text-xs font-bold text-slate-900 leading-tight">Dr. Elena Torres</div>
             <div id="clinicianCenter" class="text-[11px] text-slate-500 leading-tight">CAP Primary Care</div>
@@ -93,9 +107,9 @@
   <!-- PATIENT SELECTOR STRIP -->
   <section class="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-2.5">
     <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center space-x-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-        <i data-lucide="user" class="w-4 h-4 text-slate-400"></i>
-        <span>Select Patient File:</span>
+      <div class="flex items-center space-x-2 text-xs font-bold text-slate-500 uppercase tracking-wider">
+        <i data-lucide="users" class="w-4 h-4 text-teal-600"></i>
+        <span>Patients:</span>
       </div>
       <div id="patientSelectorList" class="flex flex-wrap items-center gap-2"></div>
     </div>
@@ -109,11 +123,11 @@
     <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[92vh] overflow-y-auto">
       <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between sticky top-0 bg-white z-10">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
-            <i data-lucide="microscope" class="w-5 h-5"></i>
+          <div id="modalIconContainer" class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white">
+            <i data-lucide="activity" class="w-5 h-5"></i>
           </div>
           <div>
-            <h3 class="font-extrabold text-lg text-slate-900">Telemetry & Optical Sputum Inspection</h3>
+            <h3 id="modalTitle" class="font-extrabold text-lg text-slate-900">Event Telemetry Breakdown</h3>
             <p id="modalSubhead" class="text-xs text-slate-500"></p>
           </div>
         </div>
@@ -121,10 +135,10 @@
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <div id="modalBody" class="p-5 sm:p-6 space-y-6"></div>
+      <div id="modalBody" class="p-5 sm:p-6 space-y-5"></div>
       <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-100 rounded-b-3xl flex justify-between items-center">
-        <span class="text-[11px] text-slate-500 font-medium">Physical button-press authenticated log</span>
-        <button onclick="closeModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition">Close Inspection</button>
+        <span class="text-[11px] text-slate-500 font-medium">FlareApp Clinical Decision Telemetry</span>
+        <button onclick="closeModal()" class="px-5 py-2 bg-[#131B34] hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition">Close Inspection</button>
       </div>
     </div>
   </div>
@@ -136,7 +150,6 @@
     let searchQuery = '';
     let notifsOpen = false;
 
-    // Load data from JSON
     async function loadData() {
       try {
         const response = await fetch('./data.json');
@@ -147,24 +160,24 @@
       renderApp();
     }
 
-    function getSputumMeta(score) {
-      if (score >= 4.0) return { hex: '#3E5C38', label: 'Purulent (Bacterial High)', bg: 'bg-rose-50 text-rose-800 border-rose-300' };
-      if (score >= 3.0) return { hex: '#8C9640', label: 'Mucopurulent (Alert)', bg: 'bg-amber-50 text-amber-800 border-amber-300' };
-      if (score >= 2.0) return { hex: '#D1CA6A', label: 'Slightly Mucopurulent', bg: 'bg-yellow-50 text-yellow-800 border-yellow-200' };
-      return { hex: '#E5EDDC', label: 'Mucoid (Normal Baseline)', bg: 'bg-emerald-50 text-emerald-800 border-emerald-200' };
+    function getColorScoreMeta(score) {
+      if (score >= 4.0) return { hex: '#3E5C38', label: 'Purulent (Dark Green/Olive)', badge: 'bg-rose-50 text-rose-800 border-rose-300' };
+      if (score >= 3.0) return { hex: '#8C9640', label: 'Mucopurulent (Light Green)', badge: 'bg-amber-50 text-amber-800 border-amber-300' };
+      if (score >= 2.0) return { hex: '#D1CA6A', label: 'Pale Yellow / Mucoid', badge: 'bg-yellow-50 text-yellow-800 border-yellow-200' };
+      return { hex: '#E5EDDC', label: 'Normal Clear Mucoid', badge: 'bg-emerald-50 text-emerald-800 border-emerald-200' };
     }
 
     function renderApp() {
       if (!appData) return;
 
-      // Render Clinician Profile & Notifications
       document.getElementById('clinicianName').innerText = appData.clinician.name;
       document.getElementById('clinicianCenter').innerText = appData.clinician.center;
 
-      const unreadNotifs = appData.notifications.filter(n => n.unread);
+      // Notifications
+      const unread = appData.notifications.filter(n => n.unread);
       const badge = document.getElementById('notifBadge');
-      if (unreadNotifs.length > 0) {
-        badge.innerText = unreadNotifs.length;
+      if (unread.length > 0) {
+        badge.innerText = unread.length;
         badge.classList.remove('hidden');
       } else {
         badge.classList.add('hidden');
@@ -181,7 +194,7 @@
         </div>
       `).join('');
 
-      // Render Patient Selector Pills
+      // Patient Selector
       const filtered = appData.patients.filter(p => 
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
         p.dni.toLowerCase().includes(searchQuery.toLowerCase())
@@ -191,193 +204,293 @@
         const isSel = p.id === selectedPatientId;
         return `
           <button onclick="selectPatient('${p.id}')" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition border ${
-            isSel ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm shadow-indigo-200' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+            isSel ? 'bg-[#147B73] text-white border-[#147B73] shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
           }">
             <span>${p.name}</span>
-            <span class="text-[10px] px-1.5 py-0.2 rounded ${isSel ? 'bg-indigo-700 text-indigo-100' : 'bg-slate-200 text-slate-600'}">
+            <span class="text-[10px] px-1.5 py-0.2 rounded ${isSel ? 'bg-[#0f605a] text-teal-100' : 'bg-slate-200 text-slate-600'}">
               ${p.assignedToMe ? 'Assigned' : 'Unassigned'}
             </span>
           </button>
         `;
       }).join('');
 
-      // Render Main Content
       const patient = appData.patients.find(p => p.id === selectedPatientId) || appData.patients[0];
       const main = document.getElementById('mainContainer');
 
       if (!patient.assignedToMe) {
-        // Restricted Access View
         main.innerHTML = `
           <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-12 text-center max-w-xl mx-auto my-12">
             <div class="w-16 h-16 rounded-2xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center mb-6">
               <i data-lucide="lock" class="w-8 h-8"></i>
             </div>
             <h2 class="text-xl font-bold text-slate-900 mb-2">Access Restricted: External Care Team</h2>
-            <p class="text-sm text-slate-600 mb-6">Patient <strong class="text-slate-900">${patient.name}</strong> (DNI: ${patient.dni}) is assigned to another care team. Medical telemetry and optical records are restricted.</p>
-            <button onclick="selectPatient('PAT-4029')" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition">
+            <p class="text-sm text-slate-600 mb-6">Patient <strong class="text-slate-900">${patient.name}</strong> is assigned to another clinical team. Telemetry and sputum records are sealed.</p>
+            <button onclick="selectPatient('PAT-4029')" class="px-6 py-2.5 bg-[#147B73] hover:bg-teal-700 text-white rounded-xl text-xs font-bold transition">
               Return to Assigned Patient (Mateo Fontdevila)
             </button>
           </div>
         `;
       } else {
-        // Split-Screen Dashboard
+        // Calculate weekly stats
+        const attackEvents = patient.logs.filter(l => l.category === 'event');
+        const attacksThisWeek = attackEvents.length;
+
         main.innerHTML = `
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <!-- LEFT PANEL: PROFILE & BASELINE -->
+            
+            <!-- LEFT PANEL: PATIENT BASELINE & PROFILE -->
             <aside class="lg:col-span-4 space-y-6">
+              
+              <!-- Patient Demographics & FEV1 of Last Visit -->
               <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-                <span class="text-[11px] font-mono text-indigo-600 font-bold">${patient.id} • DNI: ${patient.dni}</span>
+                <span class="text-[11px] font-mono text-teal-700 font-bold tracking-wider">${patient.id} • DNI: ${patient.dni}</span>
                 <h2 class="text-xl font-extrabold text-slate-900 mt-0.5">${patient.name}</h2>
                 <p class="text-xs text-slate-500 mt-1">${patient.age} yo • ${patient.sex} • ${patient.smokingStatus}</p>
 
                 <!-- AI Exacerbation Predictor -->
-                <div class="mt-5 p-4 rounded-xl bg-gradient-to-br from-slate-900 to-indigo-950 text-white">
+                <div class="mt-5 p-4 rounded-xl bg-gradient-to-br from-[#131B34] to-[#147B73] text-white">
                   <div class="flex items-center justify-between">
                     <div>
-                      <div class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">AI Flare-Up Predictor (24-48h)</div>
-                      <div class="text-3xl font-black mt-1">${patient.exacerbationRiskScore}<span class="text-sm font-normal text-slate-400">/100</span></div>
+                      <div class="text-[11px] font-semibold text-teal-200 uppercase tracking-wider">AI Flare-Up Predictor (24-48h)</div>
+                      <div class="text-3xl font-black mt-1">${patient.exacerbationRiskScore}<span class="text-sm font-normal text-teal-100">/100</span></div>
                     </div>
-                    <span class="px-2.5 py-1 text-xs font-bold rounded-lg ${patient.exacerbationRiskScore > 75 ? 'bg-rose-500/20 text-rose-300' : 'bg-amber-500/20 text-amber-300'}">
-                      ${patient.exacerbationRiskScore > 75 ? 'CRITICAL IMMINENT' : 'ELEVATED WATCH'}
+                    <span class="px-2.5 py-1 text-xs font-bold rounded-lg ${patient.exacerbationRiskScore > 75 ? 'bg-rose-500/30 text-rose-200 border border-rose-400/40' : 'bg-teal-500/30 text-teal-200 border border-teal-400/40'}">
+                      ${patient.exacerbationRiskScore > 75 ? 'CRITICAL IMMINENT' : 'STABLE WATCH'}
                     </span>
                   </div>
-                  <div class="w-full bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
-                    <div class="h-full ${patient.exacerbationRiskScore > 75 ? 'bg-rose-500' : 'bg-amber-400'}" style="width: ${patient.exacerbationRiskScore}%"></div>
+                  <div class="w-full bg-black/30 rounded-full h-2 mt-3 overflow-hidden">
+                    <div class="h-full ${patient.exacerbationRiskScore > 75 ? 'bg-rose-500' : 'bg-teal-300'}" style="width: ${patient.exacerbationRiskScore}%"></div>
                   </div>
                 </div>
 
-                <!-- COPD Baseline Metrics -->
+                <!-- Last Visit FEV1 & Clinical Metrics -->
                 <div class="grid grid-cols-2 gap-3 mt-4 text-xs">
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <span class="text-slate-400 font-medium">FEV1 % Predicted</span>
-                    <p class="text-base font-bold text-slate-800 mt-0.5">${patient.fev1Predicted}%</p>
+                    <span class="text-slate-400 font-medium block">FEV1 (Last Visit)</span>
+                    <p class="text-sm font-extrabold text-[#131B34] mt-0.5">${patient.fev1LastVisit}</p>
                   </div>
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <span class="text-slate-400 font-medium">GOLD Stage</span>
-                    <p class="text-base font-bold text-slate-800 mt-0.5">${patient.goldStage.split(' ')[0]} ${patient.goldStage.split(' ')[1]}</p>
+                    <span class="text-slate-400 font-medium block">GOLD Stage</span>
+                    <p class="text-sm font-extrabold text-slate-800 mt-0.5">${patient.goldStage}</p>
                   </div>
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <span class="text-slate-400 font-medium">BMI</span>
-                    <p class="text-base font-bold text-slate-800 mt-0.5">${patient.bmi} kg/m²</p>
+                    <span class="text-slate-400 font-medium block">BMI</span>
+                    <p class="text-sm font-extrabold text-slate-800 mt-0.5">${patient.bmi} kg/m²</p>
                   </div>
                   <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <span class="text-slate-400 font-medium">Hospitalizations (Yr)</span>
-                    <p class="text-base font-bold text-rose-600 mt-0.5">${patient.hospitalizationsLastYear} Admissions</p>
+                    <span class="text-slate-400 font-medium block">Hosp. Last Year</span>
+                    <p class="text-sm font-extrabold text-rose-600 mt-0.5">${patient.hospitalizationsLastYear} Admissions</p>
                   </div>
                 </div>
               </div>
 
-              <!-- Delta Context & Regimen -->
-              <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Clinical Baseline Delta Context</h3>
-                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-                  <div class="flex items-center justify-between">
-                    <span class="text-slate-600 font-medium">Baseline Sputum Color:</span>
-                    <span class="font-bold text-slate-900 flex items-center">
-                      <span class="w-3 h-3 rounded-full mr-1.5 border border-slate-300" style="background-color: ${getSputumMeta(patient.baselineSputumScore).hex}"></span>
-                      Score ${patient.baselineSputumScore.toFixed(1)} (Mucoid)
-                    </span>
-                  </div>
+              <!-- EXACT PATIENT BASELINE CARD -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
+                <div class="flex items-center space-x-2">
+                  <i data-lucide="compass" class="w-4 h-4 text-teal-700"></i>
+                  <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Patient Baseline</h3>
                 </div>
-                <div>
-                  <div class="text-xs font-semibold text-slate-700 mb-2">Active Prescriptions</div>
-                  <div class="space-y-1.5">
-                    ${patient.currentMedications.map(m => `
-                      <div class="text-xs p-2 rounded-lg bg-slate-50 border border-slate-100 flex justify-between">
-                        <span class="font-bold text-slate-800">${m.name}</span>
-                        <span class="font-mono text-indigo-600">${m.dose}</span>
-                      </div>
-                    `).join('')}
+
+                <div class="grid grid-cols-2 gap-3 text-xs pt-1">
+                  <!-- Baseline Sputum Color -->
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <span class="text-slate-500 font-medium block mb-1">Baseline Sputum Color</span>
+                    <div class="flex items-center space-x-2">
+                      <span class="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0" style="background-color: ${getColorScoreMeta(patient.baseline.sputumColorScore).hex}"></span>
+                      <span class="font-extrabold text-slate-900">Score ${patient.baseline.sputumColorScore.toFixed(1)}</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 block mt-0.5">${patient.baseline.sputumColorDescription}</span>
+                  </div>
+
+                  <!-- Baseline Volume Score -->
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <span class="text-slate-500 font-medium block mb-1">Baseline Volume Score</span>
+                    <p class="text-base font-extrabold text-slate-900">${patient.baseline.volumeScore} <span class="text-xs text-slate-400 font-normal">/ 5</span></p>
+                    <span class="text-[10px] text-slate-400 block mt-0.5">Usual daily volume</span>
+                  </div>
+
+                  <!-- Attack Frequency per Week -->
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <span class="text-slate-500 font-medium block mb-1">Attack Frequency</span>
+                    <p class="text-base font-extrabold text-teal-800">${patient.baseline.attackFrequencyPerWeek} <span class="text-xs font-normal text-slate-500">/ week</span></p>
+                    <span class="text-[10px] text-slate-400 block mt-0.5">Typical weekly baseline</span>
+                  </div>
+
+                  <!-- Rescue Puffs Per Day -->
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <span class="text-slate-500 font-medium block mb-1">Rescue Puffs</span>
+                    <p class="text-base font-extrabold text-slate-900">${patient.baseline.rescuePuffsPerDay} <span class="text-xs font-normal text-slate-500">puff / day</span></p>
+                    <span class="text-[10px] text-slate-400 block mt-0.5">Baseline daily SABA</span>
                   </div>
                 </div>
               </div>
+
+              <!-- Current Regimen -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-2">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">Active Maintenance Regimen</h3>
+                ${patient.currentMedications.map(m => `
+                  <div class="text-xs p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
+                    <div>
+                      <span class="font-bold text-slate-800 block">${m.name}</span>
+                      <span class="text-[10px] text-slate-400">${m.type}</span>
+                    </div>
+                    <span class="font-mono text-teal-800 font-bold bg-teal-50 px-2 py-0.5 rounded border border-teal-200">${m.dose}</span>
+                  </div>
+                `).join('')}
+              </div>
+
             </aside>
 
-            <!-- RIGHT PANEL: CHARTS & LOGS -->
+            <!-- RIGHT PANEL: ANALYTICS & EVENTS STREAM -->
             <section class="lg:col-span-8 space-y-6">
-              <!-- Charts Row -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Sputum Score SVG Trend -->
-                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                  <div class="flex justify-between items-center mb-2">
+
+              <!-- Analytics Top Strip -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                
+                <!-- Sputum Color Score Trend -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm md:col-span-2 flex flex-col justify-between">
+                  <div class="flex justify-between items-center mb-1">
                     <div>
-                      <h4 class="text-xs font-bold text-slate-900 uppercase">Sputum Purulence Trend</h4>
-                      <p class="text-[11px] text-slate-500">CIE L*a*b* score (1.0 - 5.0)</p>
+                      <h4 class="text-xs font-bold text-slate-900 uppercase">Sputum Color Score Over Time</h4>
+                      <p class="text-[11px] text-slate-500">Tracked from Button Attacks (1.0 clear to 5.0 purulent dark green)</p>
                     </div>
-                    <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">Δ +2.4 Shift</span>
+                    <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">Current: 4.4</span>
                   </div>
-                  <div class="h-28 w-full">
-                    <svg class="w-full h-full" viewBox="0 0 200 80">
-                      <rect x="0" y="0" width="200" height="26" fill="#FEE2E2" opacity="0.4" />
-                      <rect x="0" y="26" width="200" height="26" fill="#FEF3C7" opacity="0.3" />
-                      <rect x="0" y="52" width="200" height="28" fill="#ECFDF5" opacity="0.5" />
-                      <line x1="0" y1="60" x2="200" y2="60" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="3 3" />
-                      <polyline fill="none" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round" points="15,64 60,62 105,58 150,36 190,12" />
-                      <circle cx="15" cy="64" r="3" fill="#10B981" />
-                      <circle cx="60" cy="62" r="3" fill="#10B981" />
-                      <circle cx="105" cy="58" r="3" fill="#F59E0B" />
-                      <circle cx="150" cy="36" r="3.5" fill="#F43F5E" />
-                      <circle cx="190" cy="12" r="4.5" fill="#BE123C" />
+
+                  <!-- SVG Trend Chart -->
+                  <div class="h-28 w-full mt-2">
+                    <svg class="w-full h-full" viewBox="0 0 240 80">
+                      <!-- Risk Threshold Zones -->
+                      <rect x="0" y="0" width="240" height="26" fill="#FEE2E2" opacity="0.4" />
+                      <rect x="0" y="26" width="240" height="26" fill="#FEF3C7" opacity="0.3" />
+                      <rect x="0" y="52" width="240" height="28" fill="#ECFDF5" opacity="0.5" />
+                      
+                      <!-- Baseline 2.0 Line -->
+                      <line x1="0" y1="60" x2="240" y2="60" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="3 3" />
+                      <text x="5" y="57" fill="#64748B" font-size="6" font-weight="bold">Baseline (2.0)</text>
+
+                      <!-- Trend Line for Events with Sputum -->
+                      <polyline fill="none" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round" points="30,62 120,34 210,14" />
+                      <circle cx="30" cy="62" r="3.5" fill="#10B981" />
+                      <circle cx="120" cy="34" r="3.5" fill="#F59E0B" />
+                      <circle cx="210" cy="14" r="5" fill="#BE123C" />
+                      <text x="20" y="72" fill="#64748B" font-size="6">Oct 22 (1.9)</text>
+                      <text x="105" y="44" fill="#64748B" font-size="6">Oct 24 (3.6)</text>
+                      <text x="195" y="24" fill="#BE123C" font-size="6" font-weight="bold">Today (4.4)</text>
                     </svg>
                   </div>
+                  <span class="text-[10px] text-slate-400 mt-1">* Note: Daily checks do not include sputum; only button-hold attacks collect sputum scores.</span>
                 </div>
 
-                <!-- Duration Bar Chart -->
-                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                  <div class="flex justify-between items-center mb-2">
-                    <div>
-                      <h4 class="text-xs font-bold text-slate-900 uppercase">Attack Hold Duration</h4>
-                      <p class="text-[11px] text-slate-500">Phone button-press duration (sec)</p>
+                <!-- Attack Frequency Widget -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+                  <div>
+                    <span class="text-xs font-bold text-slate-500 uppercase">Attack Frequency</span>
+                    <div class="mt-2 flex items-baseline space-x-2">
+                      <span class="text-3xl font-black text-slate-900">${attacksThisWeek}</span>
+                      <span class="text-xs text-slate-500">attacks this week</span>
                     </div>
                   </div>
-                  <div class="h-28 flex items-end justify-between px-4 pt-4">
-                    <div class="flex flex-col items-center"><span class="text-[10px] text-slate-400">0s</span><div class="w-8 bg-indigo-300 rounded-t h-2"></div><span class="text-[10px] text-slate-500 mt-1">21st</span></div>
-                    <div class="flex flex-col items-center"><span class="text-[10px] text-slate-400">45s</span><div class="w-8 bg-indigo-400 rounded-t h-8"></div><span class="text-[10px] text-slate-500 mt-1">22nd</span></div>
-                    <div class="flex flex-col items-center"><span class="text-[10px] text-slate-400">0s</span><div class="w-8 bg-indigo-300 rounded-t h-2"></div><span class="text-[10px] text-slate-500 mt-1">23rd</span></div>
-                    <div class="flex flex-col items-center"><span class="text-[10px] text-rose-600 font-bold">96s</span><div class="w-8 bg-amber-500 rounded-t h-16"></div><span class="text-[10px] text-slate-500 mt-1">24th</span></div>
-                    <div class="flex flex-col items-center"><span class="text-[10px] text-rose-600 font-bold">142s</span><div class="w-8 bg-rose-600 rounded-t h-24"></div><span class="text-[10px] text-slate-500 mt-1">Today</span></div>
+                  <div class="pt-3 border-t border-slate-100">
+                    <div class="flex justify-between text-xs">
+                      <span class="text-slate-500">Baseline Rate:</span>
+                      <span class="font-bold text-slate-800">${patient.baseline.attackFrequencyPerWeek} / week</span>
+                    </div>
+                    <div class="mt-2 text-[11px] text-rose-600 font-bold bg-rose-50 p-2 rounded-lg border border-rose-200">
+                      Spike: +${Math.round(((attacksThisWeek - patient.baseline.attackFrequencyPerWeek) / patient.baseline.attackFrequencyPerWeek) * 100)}% above baseline
+                    </div>
                   </div>
                 </div>
+
               </div>
 
-              <!-- TELEMETRY LOGS TABLE -->
+              <!-- TELEMETRY & SYMPTOM LOG STREAM -->
               <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-4 border-b border-slate-100">
-                  <h3 class="font-extrabold text-base text-slate-900">Telemetry Stream & Symptom Logs</h3>
+                <div class="p-4 sm:p-5 border-b border-slate-100 flex justify-between items-center">
+                  <div>
+                    <h3 class="font-extrabold text-base text-slate-900">Event Stream & Daily Logs</h3>
+                    <p class="text-xs text-slate-500 mt-0.5">Chronological button attacks (with sputum) and daily symptom checks</p>
+                  </div>
                 </div>
+
                 <div class="overflow-x-auto">
                   <table class="w-full text-left text-xs text-slate-600">
-                    <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px]">
+                    <thead class="bg-slate-50 text-slate-400 uppercase font-bold text-[10px] tracking-wider border-b border-slate-100">
                       <tr>
-                        <th class="py-3 px-4">Date/Time</th>
-                        <th class="py-3 px-4">Type</th>
+                        <th class="py-3 px-4">Date / Time</th>
+                        <th class="py-3 px-4">Log Type</th>
                         <th class="py-3 px-4">Duration</th>
-                        <th class="py-3 px-4">Dyspnea</th>
-                        <th class="py-3 px-4">Inhalers</th>
+                        <th class="py-3 px-4">Event Symptoms / Status</th>
+                        <th class="py-3 px-4">Sputum Color Score & Vol.</th>
                         <th class="py-3 px-4">Environment</th>
-                        <th class="py-3 px-4">Sputum Score</th>
                         <th class="py-3 px-4 text-right">Action</th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                      ${patient.logs.map(l => {
-                        const meta = getSputumMeta(l.sputumScore);
+                      ${patient.logs.map(log => {
+                        const isEvent = log.category === 'event';
+                        const meta = isEvent ? getColorScoreMeta(log.sputumColorScore) : null;
+
                         return `
-                          <tr onclick="openModal('${l.id}')" class="cursor-pointer hover:bg-slate-50 transition ${l.significantChange ? 'bg-amber-50/40 border-l-4 border-l-amber-500' : ''}">
-                            <td class="py-3.5 px-4 font-semibold text-slate-800">${l.timestamp}</td>
-                            <td class="py-3.5 px-4">${l.type === 'button_attack' ? '<span class="text-rose-600 font-bold">Button Attack</span>' : 'Daily Check'}</td>
-                            <td class="py-3.5 px-4 font-mono font-bold">${l.durationSec > 0 ? l.durationSec + 's' : '—'}</td>
-                            <td class="py-3.5 px-4 font-bold ${l.dyspnea >= 4 ? 'text-rose-600' : 'text-slate-800'}">${l.dyspnea}/5</td>
-                            <td class="py-3.5 px-4 font-mono">${l.inhalerPuffs} puffs</td>
-                            <td class="py-3.5 px-4 text-[11px]">AQI ${l.aqi} • ${l.tempC}°C • ${l.humidity}%</td>
+                          <tr onclick="openModal('${log.id}')" class="cursor-pointer hover:bg-slate-50 transition ${log.significantChange ? 'bg-amber-50/40 border-l-4 border-l-amber-500' : ''}">
+                            <td class="py-3.5 px-4 font-semibold text-slate-800 whitespace-nowrap">${log.timestamp}</td>
+                            
+                            <!-- Type Badge -->
                             <td class="py-3.5 px-4">
-                              <span class="inline-flex items-center px-2 py-0.5 rounded border text-[11px] font-bold ${meta.bg}">
-                                <span class="w-2.5 h-2.5 rounded-full mr-1.5" style="background-color: ${meta.hex}"></span>
-                                ${l.sputumScore.toFixed(1)}
-                              </span>
+                              ${isEvent ? `
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-md font-bold text-[11px] bg-rose-50 text-rose-700 border border-rose-200">
+                                  Attack (${log.eventType})
+                                </span>
+                              ` : `
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-md font-medium text-[11px] bg-teal-50 text-teal-800 border border-teal-200">
+                                  Daily Check
+                                </span>
+                              `}
                             </td>
+
+                            <!-- Duration -->
+                            <td class="py-3.5 px-4 font-mono font-bold">
+                              ${isEvent ? `${log.durationSec}s` : '<span class="text-slate-300 font-normal">—</span>'}
+                            </td>
+
+                            <!-- Symptoms / Status Context -->
+                            <td class="py-3.5 px-4">
+                              ${isEvent ? `
+                                <div class="space-y-0.5 text-[11px]">
+                                  <span>Fever (last 3d): <strong class="${log.feverLast3Days ? 'text-rose-600' : 'text-slate-700'}">${log.feverLast3Days ? 'Yes' : 'No'}</strong></span> • 
+                                  <span>Inhalers (3d): <strong>${log.inhalersLast3Days}</strong></span>
+                                </div>
+                              ` : `
+                                <div class="flex flex-wrap gap-1 text-[10px]">
+                                  <span class="px-1.5 py-0.5 rounded ${log.agitatedFeeling ? 'bg-amber-100 text-amber-800 font-bold' : 'bg-slate-100 text-slate-500'}">Agitated: ${log.agitatedFeeling ? 'Yes' : 'No'}</span>
+                                  <span class="px-1.5 py-0.5 rounded ${log.coldSymptoms ? 'bg-amber-100 text-amber-800 font-bold' : 'bg-slate-100 text-slate-500'}">Cold: ${log.coldSymptoms ? 'Yes' : 'No'}</span>
+                                  <span class="px-1.5 py-0.5 rounded ${log.lackOfAirFeeling ? 'bg-rose-100 text-rose-800 font-bold' : 'bg-slate-100 text-slate-500'}">Air hunger: ${log.lackOfAirFeeling ? 'Yes' : 'No'}</span>
+                                  <span class="px-1.5 py-0.5 rounded ${log.pressureChest ? 'bg-rose-100 text-rose-800 font-bold' : 'bg-slate-100 text-slate-500'}">Chest pressure</span>
+                                </div>
+                              `}
+                            </td>
+
+                            <!-- Sputum (Only for Button Attacks) -->
+                            <td class="py-3.5 px-4">
+                              ${isEvent ? `
+                                <div class="flex items-center space-x-2">
+                                  <span class="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0" style="background-color: ${meta.hex}"></span>
+                                  <span class="font-extrabold text-slate-900">${log.sputumColorScore.toFixed(1)}</span>
+                                  <span class="text-[10px] px-1.5 py-0.2 rounded border font-semibold ${meta.badge}">Vol: ${log.sputumVolumeScore}/5</span>
+                                </div>
+                              ` : `
+                                <span class="text-[11px] text-slate-400 italic">No sputum (Daily Check)</span>
+                              `}
+                            </td>
+
+                            <!-- Environment -->
+                            <td class="py-3.5 px-4 text-[11px]">
+                              AQI ${log.aqi} • ${log.tempC}°C • ${log.humidity}%
+                            </td>
+
+                            <!-- Action -->
                             <td class="py-3.5 px-4 text-right">
-                              <button class="px-2.5 py-1 text-xs font-bold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100">Inspect</button>
+                              <button class="px-2.5 py-1 text-xs font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 rounded-lg transition">Inspect</button>
                             </td>
                           </tr>
                         `;
@@ -386,12 +499,12 @@
                   </table>
                 </div>
               </div>
+
             </section>
           </div>
         `;
       }
 
-      // Re-initialize Lucide Icons after DOM updates
       lucide.createIcons();
     }
 
@@ -415,51 +528,114 @@
       const log = patient.logs.find(l => l.id === logId);
       if (!log) return;
 
-      const meta = getSputumMeta(log.sputumScore);
+      const isEvent = log.category === 'event';
+      const modalBody = document.getElementById('modalBody');
 
-      document.getElementById('modalSubhead').innerText = `Recorded ${log.timestamp} • Patient: ${patient.name}`;
-      document.getElementById('modalBody').innerHTML = `
-        <div class="grid grid-cols-3 gap-3 text-xs">
-          <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400">Duration</span><p class="font-bold text-slate-800 text-sm mt-0.5">${log.durationSec}s</p></div>
-          <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400">Dyspnea</span><p class="font-bold text-rose-600 text-sm mt-0.5">${log.dyspnea}/5</p></div>
-          <div class="p-3 bg-slate-50 rounded-xl"><span class="text-slate-400">Rescue Puffs</span><p class="font-bold text-slate-800 text-sm mt-0.5">${log.inhalerPuffs}</p></div>
-        </div>
+      document.getElementById('modalTitle').innerText = isEvent 
+        ? `Button Attack Telemetry (${log.eventType} Episode)` 
+        : `Daily Symptom Check-in`;
+      document.getElementById('modalSubhead').innerText = `Logged on ${log.timestamp} • Patient: ${patient.name}`;
 
-        <div class="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 text-xs">
-          <strong>Environmental Context:</strong> Air Quality AQI ${log.aqi} • Temp ${log.tempC}°C • Humidity ${log.humidity}%
-        </div>
+      if (isEvent) {
+        const meta = getColorScoreMeta(log.sputumColorScore);
 
-        <!-- Sputum Colorimetry -->
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-          <h4 class="font-extrabold text-sm text-slate-900 mb-4">CIE L*a*b* Optical Sputum Classification</h4>
-          <div class="flex items-center space-x-6">
-            <div class="w-28 h-28 rounded-full border-4 border-white shadow-xl flex items-center justify-center text-white font-mono font-bold text-sm shadow-inner" style="background-color: ${meta.hex}">
-              Score ${log.sputumScore.toFixed(1)}
+        modalBody.innerHTML = `
+          <!-- Event Core Metrics -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Event Type</span>
+              <p class="font-extrabold text-[#131B34] text-base mt-0.5">${log.eventType}</p>
             </div>
-            <div class="space-y-2 text-xs flex-1">
-              <div class="p-2.5 bg-white rounded-xl border border-slate-200 font-mono flex justify-between">
-                <span>L*: ${log.cieLab.L}</span>
-                <span>a*: ${log.cieLab.a}</span>
-                <span>b*: ${log.cieLab.b}</span>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Hold Duration</span>
+              <p class="font-extrabold text-rose-600 text-base mt-0.5">${log.durationSec}s</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Fever (Last 3 Days)</span>
+              <p class="font-extrabold text-base mt-0.5 ${log.feverLast3Days ? 'text-rose-600' : 'text-slate-800'}">${log.feverLast3Days ? 'Yes (Detected)' : 'No Fever'}</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Inhalers (Last 3 Days)</span>
+              <p class="font-extrabold text-slate-800 text-base mt-0.5">${log.inhalersLast3Days} Puffs</p>
+            </div>
+          </div>
+
+          <!-- Sputum Analysis Section -->
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="font-bold text-sm text-slate-900 flex items-center">
+                <i data-lucide="droplet" class="w-4 h-4 text-teal-700 mr-2"></i>
+                Uploaded Sputum Sample Analysis
+              </h4>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded border ${meta.badge}">${log.sputumDescription}</span>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-6">
+              <div class="w-28 h-28 rounded-full border-4 border-white shadow-lg flex items-center justify-center text-white font-black text-base shadow-inner shrink-0" style="background-color: ${meta.hex}">
+                ${log.sputumColorScore.toFixed(1)}
               </div>
-              <div class="p-2.5 bg-white rounded-xl border border-slate-200">
-                <div class="flex justify-between font-bold mb-1">
-                  <span>Bacterial Culture Positivity:</span>
-                  <span class="text-rose-600">${log.bacterialCultureProbability}%</span>
+              <div class="space-y-3 text-xs flex-1 w-full">
+                <div class="p-3 bg-white rounded-xl border border-slate-200 flex justify-between">
+                  <span class="text-slate-500 font-medium">Color score (1.0 to 5.0):</span>
+                  <span class="font-bold text-slate-900">${log.sputumColorScore.toFixed(1)} / 5.0</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2">
-                  <div class="h-full bg-rose-600 rounded-full" style="width: ${log.bacterialCultureProbability}%"></div>
+                <div class="p-3 bg-white rounded-xl border border-slate-200 flex justify-between">
+                  <span class="text-slate-500 font-medium">Reported Volume Score (1 to 5):</span>
+                  <span class="font-bold text-slate-900">${log.sputumVolumeScore} / 5</span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="p-4 rounded-2xl ${log.sputumScore >= 3.5 ? 'bg-rose-50 border border-rose-200 text-rose-900' : 'bg-emerald-50 border border-emerald-200 text-emerald-900'}">
-          <h5 class="font-bold text-xs uppercase">Recommended Clinical Action:</h5>
-          <p class="text-xs font-semibold mt-1">${log.clinicalRecommendation}</p>
-        </div>
-      `;
+          <!-- Environmental Context -->
+          <div class="p-3.5 rounded-xl bg-teal-50/60 border border-teal-100 text-xs flex justify-between items-center text-teal-900">
+            <span><strong>Air Quality:</strong> AQI ${log.aqi}</span>
+            <span><strong>Temperature:</strong> ${log.tempC} °C</span>
+            <span><strong>Humidity:</strong> ${log.humidity} %</span>
+          </div>
+
+          <!-- Clinical CDSS Recommendation -->
+          <div class="p-4 rounded-2xl ${log.sputumColorScore >= 3.5 ? 'bg-rose-50 border border-rose-200 text-rose-900' : 'bg-slate-50 border border-slate-200 text-slate-800'}">
+            <h5 class="font-bold text-xs uppercase tracking-wide">Recommended Clinical Action:</h5>
+            <p class="text-xs font-semibold mt-1 leading-relaxed">${log.clinicalRecommendation}</p>
+          </div>
+        `;
+      } else {
+        // Daily Check Details
+        modalBody.innerHTML = `
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Puffs Taken Today</span>
+              <p class="font-extrabold text-[#131B34] text-base mt-0.5">${log.puffsTakenToday} Puffs</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Agitated Feeling?</span>
+              <p class="font-extrabold text-base mt-0.5 ${log.agitatedFeeling ? 'text-amber-600' : 'text-slate-800'}">${log.agitatedFeeling ? 'Yes' : 'No'}</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Cold Symptoms?</span>
+              <p class="font-extrabold text-base mt-0.5 ${log.coldSymptoms ? 'text-amber-600' : 'text-slate-800'}">${log.coldSymptoms ? 'Yes' : 'No'}</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Lack of Air Feeling?</span>
+              <p class="font-extrabold text-base mt-0.5 ${log.lackOfAirFeeling ? 'text-rose-600' : 'text-slate-800'}">${log.lackOfAirFeeling ? 'Yes (Air hunger)' : 'No'}</p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <span class="text-slate-400 font-medium">Chest Pressure?</span>
+              <p class="font-extrabold text-base mt-0.5 ${log.pressureChest ? 'text-rose-600' : 'text-slate-800'}">${log.pressureChest ? 'Yes (Tightness)' : 'No'}</p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-100 text-xs text-slate-500 italic">
+            * Daily checks track daily symptoms and controller adherence. Sputum is collected exclusively via physical Button Attack logs.
+          </div>
+
+          <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900">
+            <h5 class="font-bold text-xs uppercase tracking-wide">Daily Check Assessment:</h5>
+            <p class="text-xs font-semibold mt-1 leading-relaxed">${log.clinicalRecommendation}</p>
+          </div>
+        `;
+      }
 
       document.getElementById('detailModal').classList.remove('hidden');
       lucide.createIcons();
@@ -469,12 +645,10 @@
       document.getElementById('detailModal').classList.add('hidden');
     }
 
-    // Close modal on Escape
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
 
-    // Initial boot
     loadData();
   </script>
 </body>
